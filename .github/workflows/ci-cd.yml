@@ -38,15 +38,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: azure/setup-kubectl@v4
-        with:
-          version: 'latest'
+      - name: Install kubeconform
+        run: |
+          curl -sSL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz -o kubeconform.tar.gz
+          tar -xzf kubeconform.tar.gz
+          sudo mv kubeconform /usr/local/bin/kubeconform
       - name: Validate manifests
         run: |
-          kubectl apply --dry-run=client --validate=false -f k8s/namespace.yaml
-          kubectl apply --dry-run=client --validate=false -f k8s/db/statefulset.yaml
-          kubectl apply --dry-run=client --validate=false -f k8s/api/deployment.yaml
-          kubectl apply --dry-run=client --validate=false -f k8s/web-ui/deployment.yaml
-          kubectl apply --dry-run=client --validate=false -f k8s/monitoring/prometheus-config.yaml
-          kubectl apply --dry-run=client --validate=false -f k8s/monitoring/grafana-dashboard.yaml
-          kubectl apply --dry-run=client --validate=false -f k8s/monitoring/grafana-deployment.yaml
+          kubeconform -summary -strict k8s/namespace.yaml
+          kubeconform -summary -strict k8s/db/statefulset.yaml
+          kubeconform -summary -strict k8s/api/deployment.yaml
+          kubeconform -summary -strict k8s/web-ui/deployment.yaml
+          kubeconform -summary -strict k8s/monitoring/prometheus-config.yaml
+          kubeconform -summary -strict k8s/monitoring/grafana-dashboard.yaml
+          kubeconform -summary -strict k8s/monitoring/grafana-deployment.yaml
