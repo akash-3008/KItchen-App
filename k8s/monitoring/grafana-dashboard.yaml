@@ -119,6 +119,6 @@ data:
       "time": { "from": "now-15m", "to": "now" },
       "timepicker": {},
       "timezone": "browser",
-      "title": "Kitchen App — Overview",
+      "title": "Kitchen App -- Overview",
       "version": 1
     }
