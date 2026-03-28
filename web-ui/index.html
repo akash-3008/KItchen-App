@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kitchen Orders</title>
   <style>
-    :root { --bg:#0b1120; --card:#111827; --border:#263347; --text:#e5e7eb; --muted:#9ca3af; --blue:#58a6ff; --green:#3fb950; --red:#f78166; }
+    :root { --bg:#ffffff; --card:#ffffff; --border:#e5e7eb; --text:#0f172a; --muted:#6b7280; --blue:#2563eb; --green:#16a34a; --red:#dc2626; }
     body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); max-width: 880px; margin: 0 auto; padding: 28px 16px; }
     h1 { margin: 0 0 10px; font-size: 28px; }
     .sub { color: var(--muted); margin: 0 0 18px; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
     .row { display:flex; gap:10px; align-items:center; }
-    input { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: #0d1117; color: var(--text); }
-    button { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: rgba(88,166,255,.15); color: var(--text); cursor:pointer; }
-    button:hover { background: rgba(88,166,255,.25); }
+    input { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: #ffffff; color: var(--text); }
+    button { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: #f1f5ff; color: var(--text); cursor:pointer; }
+    button:hover { background: #e0e7ff; }
     .pill { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; color: var(--muted); font-size: 12px; }
     .ok { color: var(--green); }
     .bad { color: var(--red); }
     table { width:100%; border-collapse: collapse; font-size: 14px; }
-    th, td { padding: 10px 8px; border-bottom: 1px solid rgba(38,51,71,.65); text-align: left; }
+    th, td { padding: 10px 8px; border-bottom: 1px solid #e5e7eb; text-align: left; }
     th { color: var(--muted); font-weight: 600; }
     a { color: var(--blue); text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -33,7 +33,7 @@
   <div class="grid">
     <div class="card">
       <div class="row" style="justify-content:space-between; margin-bottom:10px;">
-        <div class="pill">API status: <span id="apiStatus" class="bad">checking…</span></div>
+        <div class="pill">API status: <span id="apiStatus" class="bad">checkingï¿½</span></div>
         <div class="row" style="gap:12px;">
           <a href="/api/metrics" target="_blank" rel="noreferrer">/metrics</a>
           <a href="/api/health" target="_blank" rel="noreferrer">/health</a>
@@ -53,7 +53,7 @@
       <div style="overflow:auto;">
         <table>
           <thead><tr><th>Dish</th><th>Status</th><th>Created</th><th>ID</th></tr></thead>
-          <tbody id="ordersBody"><tr><td colspan="4" style="color:var(--muted);">Loading…</td></tr></tbody>
+          <tbody id="ordersBody"><tr><td colspan="4" style="color:var(--muted);">Loadingï¿½</td></tr></tbody>
         </table>
       </div>
       <div class="footer">Tip: keep this page open, then hit Prometheus/Grafana to see <code>http_requests_total</code> increase.</div>
@@ -67,7 +67,7 @@
     async function refreshHealth() { const s = el('apiStatus'); try { const { r, data } = await apiGet('/health'); if (r.ok) { s.textContent = data?.db ? `ok (db: ${data.db})` : 'ok'; s.className = 'ok'; } else { s.textContent = `error (${r.status})`; s.className = 'bad'; } } catch (e) { s.textContent = 'offline'; s.className = 'bad'; } }
     async function refreshOrders() {
       const body = el('ordersBody');
-      body.innerHTML = '<tr><td colspan="4" style="color:var(--muted);">Loading…</td></tr>';
+      body.innerHTML = '<tr><td colspan="4" style="color:var(--muted);">Loadingï¿½</td></tr>';
       try {
         const { r, data } = await apiGet('/orders');
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -79,7 +79,7 @@
           return `<tr><td>${(o?.dish || '')}</td><td>${(o?.status || '')}</td><td>${fmtDate(o?.createdAt)}</td><td style="color:var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px;">${id}</td></tr>`;
         }).join('');
       } catch (e) {
-        el('orderCount').textContent = '—';
+        el('orderCount').textContent = 'ï¿½';
         body.innerHTML = `<tr><td colspan="4" style="color:var(--red);">Failed to load orders. Is the API reachable at ${apiBase}/orders?</td></tr>`;
       }
     }
